@@ -1,0 +1,143 @@
+# Create One Word Cloud
+
+
+# Gray Scale for image if needed
+
+from PIL import Image
+
+img = Image.open('Thomas.jpeg')
+imgGray = img.convert('L')
+imgGray.save('test_gray.jpeg')
+
+
+# Flip Image if needed
+
+import PIL
+from PIL import Image
+
+#read the image
+im = Image.open("sample-image.png")
+
+#flip image
+out = im.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+out.save('transpose-output.png')
+
+
+# Create Cloud; wordcloud(color_func) changes the color of words
+
+import matplotlib.pyplot as pPlot
+from wordcloud import WordCloud, STOPWORDS
+import numpy as npy
+from PIL import Image
+dataset = open("Edison.txt", "r", encoding="utf8").read()
+def create_word_cloud(string):
+    maskArray = npy.array(Image.open('test_gray.jpeg'))
+    cloud = WordCloud(background_color = "white", max_words = 200, mask = maskArray, stopwords = set(STOPWORDS), colormap="Reds")
+    cloud.generate(string)
+    cloud.to_file("wordCloud.png")
+dataset = dataset.lower()
+create_word_cloud(dataset)
+
+
+# Overlap Cloud Blend With Original Image
+import cv2
+
+bg = cv2.imread('test_gray.jpeg', cv2.IMREAD_COLOR)
+fg = cv2.imread('wordCloud.png', cv2.IMREAD_COLOR)
+
+blend = cv2.addWeighted(bg, 0.5, fg, 0.7, 0.0) # has to total to 1
+cv2.imwrite('blended.png', blend)
+
+
+# Start of Rival Cloud
+
+# Flip Image so Word Clouds are Facing One Another
+
+import PIL
+from PIL import Image
+
+#read the image
+im2 = Image.open("sample-image.png")
+
+#flip image
+out2 = im2.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+out2.save('transpose-output2.png')
+
+
+# Gray Scale
+
+from PIL import Image
+
+imgorg = Image.open('Nikola.jpg')
+imgGray2 = imgorg.convert('L')
+imgGray2.save('test_gray2.jpg')
+
+# Create Rival Word Clouds - Second Image; Repeat Steps Above For Rival
+
+
+# Create Word Cloud
+
+import matplotlib.pyplot as pPlot
+from wordcloud import WordCloud, STOPWORDS
+import numpy as npy
+from PIL import Image
+
+dataset2 = open("Tesla.txt", "r", encoding="utf8").read()
+
+def create_word_cloud2(string):
+    maskArray = npy.array(Image.open('test_gray2.jpg'))
+    cloud2 = WordCloud(background_color = "white", max_words = 200, mask = maskArray, stopwords = set(STOPWORDS), colormap="Blues")
+    cloud2.generate(string)
+    cloud2.to_file("wordCloud2.png")
+dataset2 = dataset2.lower()
+create_word_cloud2(dataset2)
+
+
+# Blend cloud with original image
+
+import cv2
+
+img2 = cv2.imread('test_gray2.jpg', cv2.IMREAD_COLOR)
+img21 = cv2.imread('wordCloud2.png', cv2.IMREAD_COLOR)
+
+blend2 = cv2.addWeighted(img2, 0.5, img21, 0.7, 0.0)
+cv2.imwrite('blended2.png', blend2)
+
+
+# Join Rival Images to Save After Resizing
+
+# Quickview of images; colors flipped for some reason
+
+import cv2
+
+img1 = cv2.imread('blended.png')
+img2 = cv2.imread('blended2.png')
+
+# display images
+fig, ax = plt.subplots(1,2)
+ax[0].imshow(img1);
+ax[1].imshow(img2);
+
+
+# Verify Shapes
+
+img1.shape
+
+
+# Verify Shape; use the smallest and reverse it in the dim variable below so images fit together.
+
+img2.shape
+
+# Resize using the lower shape of the two; Reverse the LxW #s
+
+dim = (786, 594)
+ 
+resized_img1 = cv2.resize(img1, dim, interpolation = cv2.INTER_AREA)
+resized_img2 = cv2.resize(img2, dim, interpolation = cv2.INTER_AREA)
+
+
+# Merge the Images Side-by-Side
+
+im_h = cv2.hconcat([resized_img1, resized_img2])
+cv2.imwrite('merged3.jpg', im_h)
+
